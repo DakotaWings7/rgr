@@ -1,0 +1,23 @@
+version: '3.8'
+
+volumes:
+  rgr-postgresql-volume:
+    name: rgr-postgresql-volume
+
+services:
+  rgr-postgresql-postgresql:
+    container_name: rgr-postgresql
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=rgr
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    volumes:
+      - rgr-postgresql-volume:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          memory: 300m

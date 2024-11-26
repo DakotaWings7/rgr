@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовок страницы */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        /* Форма */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        /* Кнопка */
+        .submit-button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .submit-button:active {
+            background-color: #004494;
+        }
+
+        /* Кнопка возврата */
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #0056b3;
+        }
+
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            appearance: none; /* Убирает стандартный стиль */
+        }
+
+        select:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        select option {
+            color: #333;
+            background-color: #fff;
+        }
+
+        #counter {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #study-years {
+            width: 60px;
+            text-align: center;
+            margin: 0 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="header">
+        <h1>Добавить выпускника</h1>
+    </div>
+
+    <!-- Форма -->
+    <form th:method="POST" th:action="@{/graduates}" th:object="${graduate}">
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" placeholder="Введите имя выпускника"/>
+
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" placeholder="Введите фамилию выпускника"/>
+
+        <label for="middleName">Отчество:</label>
+        <input type="text" id="middleName" th:field="*{middleName}" placeholder="Введите отчество выпускника"/>
+
+        <label for="university">Специальность:</label>
+        <select id="university" th:field="*{specialityId}">
+            <option value="" disabled selected>Выберите специальность</option>
+            <option th:each="speciality : ${specialities}"
+                    th:value="${speciality.id}"
+                    th:text="${speciality.name}">
+            </option>
+        </select>
+
+        <label for="study-years">Год выпуска:</label>
+        <div id="counter">
+            <input type="number" id="study-years" th:field="*{graduateYear}" value="1900" min="1900">
+        </div>
+
+        <br>
+
+        <button type="submit" class="submit-button">Создать</button>
+    </form>
+
+    <!-- Кнопка возврата -->
+    <a th:href="@{/graduates}" class="back-button">← Вернуться к списку</a>
+</div>
+
+</body>
+</html>

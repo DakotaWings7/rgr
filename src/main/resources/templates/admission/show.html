@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        .university-info {
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .university-info p {
+            margin: 10px 0;
+        }
+
+        .university-info p strong {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn:active {
+            background-color: #004494;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="header">
+        <h1 th:text="${universityService.findById(specialityService.findById(admission.specialityId).universityId).name}">>Информация</h1>
+    </div>
+
+    <!-- Информация об университете -->
+    <div class="university-info">
+        <p><strong>Специальность:</strong> <span
+                th:text="${specialityService.findById(admission.specialityId).name}">Специальность</span></p>
+
+        <strong>Год набора:</strong> <span th:text="${admission.admissionYear}">Год набора</span>
+
+        <strong>Количество мест:</strong> <span th:text="${admission.studentsCount}">Количество мест</span>
+    </div>
+
+    <br>
+
+    <!-- Кнопки -->
+    <div class="button-group">
+        <a th:href="@{/admissions}" class="btn">← Назад к списку</a>
+        <a th:href="@{/admissions/{id}/edit(id=${admission.id})}" class="btn">Редактировать</a>
+
+        <!-- Кнопка удаления -->
+        <form th:method="DELETE" th:action="@{/admissions/{id}(id=${admission.id})}" style="display:inline;">
+            <button type="submit" class="btn delete-btn" onclick="return confirm('Вы уверены, что хотите удалить набор?')">Удалить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

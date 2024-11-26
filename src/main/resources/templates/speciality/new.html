@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовок страницы */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        /* Форма */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        /* Кнопка */
+        .submit-button {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .submit-button:active {
+            background-color: #004494;
+        }
+
+        /* Кнопка возврата */
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #0056b3;
+        }
+
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+            appearance: none; /* Убирает стандартный стиль */
+        }
+
+        select:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            outline: none;
+        }
+
+        select option {
+            color: #333;
+            background-color: #fff;
+        }
+
+        #counter {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .counter-button {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            line-height: 40px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .counter-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 86, 179, 0.3);
+        }
+
+        .counter-button:active {
+            background-color: #004494;
+        }
+
+        #study-years {
+            width: 60px;
+            text-align: center;
+            margin: 0 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            pointer-events: none; /* Запрещает ручное изменение */
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="header">
+        <h1>Добавить университет</h1>
+    </div>
+
+    <!-- Форма -->
+    <form th:method="POST" th:action="@{/specialities}" th:object="${speciality}">
+        <label for="name">Название:</label>
+        <input type="text" id="name" th:field="*{name}" placeholder="Введите название специальности"/>
+
+        <label for="university">Университет:</label>
+        <select id="university" th:field="*{universityId}">
+            <option value="" disabled selected>Выберите университет</option>
+            <option th:each="university : ${universities}"
+                    th:value="${university.id}"
+                    th:text="${university.name}">
+            </option>
+        </select>
+
+        <label for="study-years">Количество годов обучения:</label>
+        <div id="counter">
+            <button type="button" id="decrease" class="counter-button">−</button>
+            <input type="number" id="study-years" th:field="*{educationYears}" value="1" min="1" readonly>
+            <button type="button" id="increase" class="counter-button">+</button>
+        </div>
+
+        <br>
+
+        <button type="submit" class="submit-button">Создать</button>
+    </form>
+
+    <!-- Кнопка возврата -->
+    <a th:href="@{/specialities}" class="back-button">← Вернуться к списку</a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const decreaseButton = document.getElementById("decrease");
+        const increaseButton = document.getElementById("increase");
+        const studyYearsInput = document.getElementById("study-years");
+
+        decreaseButton.addEventListener("click", function () {
+            let value = parseInt(studyYearsInput.value, 10) || 1; // Устанавливаем 1, если значение пустое
+            if (value > 1) {
+                studyYearsInput.value = value - 1;
+            }
+        });
+
+        increaseButton.addEventListener("click", function () {
+            let value = parseInt(studyYearsInput.value, 10) || 1;
+            studyYearsInput.value = value + 1;
+        });
+    });
+
+</script>
+
+</body>
+</html>

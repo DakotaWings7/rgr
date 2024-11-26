@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Наборы</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Панель навигации */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .navigation a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .navigation a:hover {
+            color: #d4e3ff;
+        }
+
+        /* Заголовок страницы */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        /* Университеты */
+        .university-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .university-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .university-item:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .university-details {
+            flex: 1;
+        }
+
+        .university-details h3 {
+            font-size: 18px;
+            margin: 0 0 5px;
+            color: #333;
+        }
+
+        .university-details p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .arrow-link {
+            font-size: 20px;
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .arrow-link:hover {
+            color: #0056b3;
+        }
+
+        /* Кнопка добавления */
+        .add-button {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .add-button:active {
+            background-color: #004494;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Панель навигации -->
+    <div class="navigation">
+        <a th:href="@{/universities}">Университеты</a>
+        <a th:href="@{/specialities}">Специальности</a>
+        <a th:href="@{/graduates}">Выпускники</a>
+        <a th:href="@{/admissions}">Наборы</a>
+        <a th:href="@{/employments}">Трудоустройства</a>
+    </div>
+
+    <!-- Заголовок страницы -->
+    <div class="header">
+        <h1>Наборы</h1>
+    </div>
+
+    <!-- Список университетов -->
+    <ul class="university-list">
+        <li th:each="admission : ${admissions}" class="university-item">
+            <div class="university-details">
+                <h3 th:text="${universityService.findById(specialityService.findById(admission.specialityId).universityId).name} + ', '
+                + ${specialityService.findById(admission.specialityId).name}">ВУЗ, Специальность</h3>
+
+                <strong>Количество мест:</strong> <span th:text="${admission.studentsCount}">Количество мест</span>
+            </div>
+            <a th:href="@{/admissions/{id}(id=${admission.id})}" class="arrow-link">&gt;</a>
+        </li>
+    </ul>
+
+    <!-- Кнопка добавления университета -->
+    <a th:href="@{/admissions/new}" class="add-button">Добавить набор</a>
+</div>
+</body>
+</html>

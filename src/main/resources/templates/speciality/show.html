@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        .university-info {
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .university-info p {
+            margin: 10px 0;
+        }
+
+        .university-info p strong {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn:active {
+            background-color: #004494;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="header">
+        <h1 th:text="${speciality.name}">Название специальности</h1>
+    </div>
+
+    <!-- Информация об университете -->
+    <div class="university-info">
+        <p><strong>ID:</strong> <span th:text="${speciality.id}">123</span></p>
+
+        <strong>Длительность обучения:</strong> <span th:text="${speciality.educationYears}">Университет</span>
+
+        <!-- Проверка на наличие университета -->
+        <p th:if="${speciality.universityId == null}">
+            <strong>Университет:</strong> Университет не найден
+        </p>
+        <p th:unless="${speciality.universityId == null}">
+            <strong>Университет:</strong> <span th:text="${university.name}">Университет</span>
+        </p>
+    </div>
+
+    <div class="specialities">
+        <h4>Наборы:</h4>
+        <ul>
+            <li th:each="admission : ${speciality.admissions}" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <span th:text="${admission.admissionYear}" style="flex-grow: 1; font-size: 16px; color: #333;">Название специальности</span>
+                <span th:text="${admission.studentsCount}" style="flex-grow: 1; font-size: 16px; color: #333;">Название специальности</span>
+
+                <form th:method="DELETE"
+                      th:action="@{/admissions/{id}(id=${admission.id})}" style="margin: 0;">
+                    <button type="submit" class="btn delete-btn" style="padding: 6px 12px; font-size: 12px; background-color: #dc3545;" onclick="return confirm('Вы уверены, что хотите удалить этого выпускника?')">Удалить</button>
+                </form>
+            </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(speciality.admissions)}">Нет доступных специальностей.</p>
+    </div>
+
+    <br><br>
+
+    <!-- Кнопки -->
+    <div class="button-group">
+        <a th:href="@{/specialities}" class="btn">← Назад к списку</a>
+        <a th:href="@{/specialities/{id}/edit(id=${speciality.id})}" class="btn">Редактировать</a>
+
+        <!-- Кнопка удаления -->
+        <form th:method="DELETE" th:action="@{/specialities/{id}(id=${speciality.id})}" style="display:inline;">
+            <button type="submit" class="btn delete-btn" onclick="return confirm('Вы уверены, что хотите удалить специальность?')">Удалить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

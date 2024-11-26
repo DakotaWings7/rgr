@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование</title>
+    <style>
+        /* Общий стиль */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовок страницы */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        /* Форма */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 6px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn:active {
+            background-color: #004494;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            box-shadow: 0 6px 12px rgba(90, 98, 104, 0.3);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Заголовок -->
+    <div class="header">
+        <h1>Редактирование</h1>
+    </div>
+
+    <!-- Форма редактирования -->
+    <form th:method="PATCH" th:action="@{/admissions/{id}(id=${admission.id})}" th:object="${admission}">
+        <label for="university">Специальность:</label>
+        <select id="university" th:field="*{specialityId}">
+            <option value="" disabled selected>Выберите специальность</option>
+            <option th:each="speciality : ${specialities}"
+                    th:value="${speciality.id}"
+                    th:text="${speciality.name}">
+            </option>
+        </select>
+
+        <label for="admissionYear">Год:</label>
+        <input type="text" id="admissionYear" th:field="*{admissionYear}" placeholder="Введите год, в котором проводился набор"/>
+
+        <label for="studentsCount">Количество мест:</label>
+        <input type="text" id="studentsCount" th:field="*{studentsCount}" placeholder="Введите количество мест"/>
+
+        <br>
+
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+            <a th:href="@{/admissions}" class="btn btn-secondary">Отмена</a>
+            <button type="submit" class="btn">Сохранить</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
